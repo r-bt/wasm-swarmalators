@@ -1,9 +1,52 @@
-import init, { Swarmalator } from "my-crate";
-import { memory } from "my-crate/my_crate_bg";
+import init, { Swarmalator } from "wasm-swarmalators";
+import { memory } from "wasm-swarmalators/wasm-swamalators_bg";
 // import { memory } from "my-create/my_crate_bg";
 // Don't worry if vscode told you can't find my-crate
 // It's because you're using a local crate
 // after yarn dev, wasm-pack plugin will install my-crate for you
+
+const fps = new (class {
+  constructor() {
+    this.fps = document.getElementById("fps");
+    this.frames = [];
+    this.lastFrameTimeStamp = performance.now();
+  }
+
+  render() {
+    // Convert the delta time since the last frame render into a measure
+    // of frames per second.
+    const now = performance.now();
+    const delta = now - this.lastFrameTimeStamp;
+    this.lastFrameTimeStamp = now;
+    const fps = (1 / delta) * 1000;
+
+    // Save only the latest 100 timings.
+    this.frames.push(fps);
+    if (this.frames.length > 100) {
+      this.frames.shift();
+    }
+
+    // Find the max, min, and mean of our 100 latest timings.
+    let min = Infinity;
+    let max = -Infinity;
+    let sum = 0;
+    for (let i = 0; i < this.frames.length; i++) {
+      sum += this.frames[i];
+      min = Math.min(this.frames[i], min);
+      max = Math.max(this.frames[i], max);
+    }
+    let mean = sum / this.frames.length;
+
+    // Render the statistics.
+    this.fps.textContent = `
+Frames per Second:
+         latest = ${Math.round(fps)}
+avg of last 100 = ${Math.round(mean)}
+min of last 100 = ${Math.round(min)}
+max of last 100 = ${Math.round(max)}
+`.trim();
+  }
+})();
 
 function mapRange(num, inMin, inMax, outMin, outMax) {
   return ((num - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
@@ -70,7 +113,7 @@ function HSVtoCanvasFillStyle(angleInRadians) {
 }
 
 init().then(({ memory }) => {
-  const agents = 10;
+  const agents = 200;
 
   // Create random positions
   const agent_positions = Array.from({ length: agents }, () => [
@@ -145,6 +188,7 @@ init().then(({ memory }) => {
   let count = 0;
 
   function updateAndDraw() {
+    fps.render();
     swarmalator.update(0.05);
 
     count += 1;

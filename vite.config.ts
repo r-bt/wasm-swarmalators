@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite';
-import wasmPack from 'vite-plugin-wasm-pack';
+import { defineConfig } from "vite";
+import wasmPack from "vite-plugin-wasm-pack";
 
 export default defineConfig({
   build: {
-    minify: false
+    minify: false,
   },
-  plugins: [wasmPack(['./my-crate'])]
+  plugins: [wasmPack(["./wasm-swarmalators"])],
 });

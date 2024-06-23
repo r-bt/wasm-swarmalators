@@ -8,8 +8,9 @@
     "vite-plugin-wasm-pack": "^0.1.9"
   },
   "scripts": {
-    "wasm": "wasm-pack build ./my-crate --target=web",
+    "wasm": "wasm-pack build ./wasm-swarmalators --target=web",
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "publish": "wasm-pack publish"
   }
 }
