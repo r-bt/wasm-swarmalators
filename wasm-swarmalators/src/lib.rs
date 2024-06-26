@@ -235,4 +235,52 @@ impl Swarmalator {
 
         self.target = Some(target);
     }
+
+    /// Set the phase coupling coefficient.
+    /// # Arguments
+    /// - `K`: New value for K
+    pub fn set_K(&mut self, K: f64) {
+        self.K = K;
+    }
+
+    /// Set the spatial-phase interaction coefficient.
+    /// # Arguments
+    /// - `J`: New value for J
+    pub fn set_J(&mut self, J: f64) {
+        self.J = J;
+    }
+
+    /// Set the chiral values.
+    /// # Arguments
+    /// - `chiral`: New chiral values.
+    pub fn set_chiral(&mut self, chiral: Option<Vec<f64>>) {
+        self.chiral = chiral;
+    }
+
+    /// Set the natural frequencies.
+    /// # Arguments
+    /// - `natural_frequencies`: New natural frequencies.
+    /// # Panics
+    /// Panics if the length of `natural_frequencies` is not equal to the number of agents.
+    pub fn set_natural_frequencies(&mut self, natural_frequencies: Vec<f64>) {
+        if natural_frequencies.len() != self.agents {
+            panic!("Natural frequencies array must have agents elements")
+        }
+
+        self.natural_frequencies = natural_frequencies;
+    }
+
+    /// Set the phases
+    /// # Arguments
+    /// - `phases`: New phases.
+    ///
+    /// # Panics
+    /// Panics if the length of `phases` is not equal to the number of agents.
+    pub fn set_phases(&mut self, phases: Vec<f64>) {
+        if phases.len() != self.agents {
+            panic!("Phases array must have agents elements")
+        }
+
+        self.phases = phases;
+    }
 }
